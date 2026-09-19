@@ -18,10 +18,13 @@ build/
 
 # Gradle files
 .gradle/
+.kotlin/
 buildOutput/
 
-# Local configuration file (contains local SDK path)
+# Local configuration file (contains local SDK path and credentials)
 local.properties
+keystore.properties
+signing.properties
 
 # Proguard / R8
 proguard/

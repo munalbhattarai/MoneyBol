@@ -20,6 +20,19 @@ object NepaliNumberConverter {
         '९' to '9'
     )
 
+    private val ARABIC_TO_DEVANAGARI = mapOf(
+        '0' to '०',
+        '1' to '१',
+        '2' to '२',
+        '3' to '३',
+        '4' to '४',
+        '5' to '५',
+        '6' to '६',
+        '7' to '७',
+        '8' to '८',
+        '9' to '९'
+    )
+
     /**
      * Convert a string containing Devanagari numerals to Arabic numerals.
      * Non-Devanagari characters are preserved as-is.
@@ -27,6 +40,16 @@ object NepaliNumberConverter {
     fun toArabic(input: String): String {
         return input.map { char ->
             DEVANAGARI_TO_ARABIC[char] ?: char
+        }.joinToString("")
+    }
+
+    /**
+     * Convert a string containing Arabic numerals to Devanagari numerals.
+     * Non-Arabic characters are preserved as-is.
+     */
+    fun toNepali(input: String): String {
+        return input.map { char ->
+            ARABIC_TO_DEVANAGARI[char] ?: char
         }.joinToString("")
     }
 

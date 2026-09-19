@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +22,32 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val keystoreProperties = Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+    }
+
+    signingConfigs {
+        create("release") {
+            val storeFilePath = keystoreProperties.getProperty("storeFile")
+                ?: System.getenv("MONEYBOL_KEYSTORE_FILE")
+            val storePass = keystoreProperties.getProperty("storePassword")
+                ?: System.getenv("MONEYBOL_KEYSTORE_PASSWORD")
+            val keyAl = keystoreProperties.getProperty("keyAlias")
+                ?: System.getenv("MONEYBOL_KEY_ALIAS")
+            val keyPass = keystoreProperties.getProperty("keyPassword")
+                ?: System.getenv("MONEYBOL_KEY_PASSWORD")
+
+            if (storeFilePath != null && storePass != null && keyAl != null && keyPass != null) {
+                storeFile = rootProject.file(storeFilePath)
+                storePassword = storePass
+                keyAlias = keyAl
+                keyPassword = keyPass
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -28,6 +56,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false

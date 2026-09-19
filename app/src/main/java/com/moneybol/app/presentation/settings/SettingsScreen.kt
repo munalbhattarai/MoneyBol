@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -35,6 +36,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -51,10 +53,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moneybol.app.R
 import com.moneybol.app.core.model.AnnouncementFormat
+import com.moneybol.app.core.model.ProviderCategory
 import com.moneybol.app.core.model.ProviderStatus
 import com.moneybol.app.presentation.theme.ListeningGreen
 import com.moneybol.app.presentation.theme.PausedAmber
@@ -99,6 +103,37 @@ fun SettingsScreen(
 
             // ── Voice Settings ──
             SettingsSection(title = stringResource(R.string.voice_settings), icon = Icons.AutoMirrored.Rounded.VolumeUp) {
+                // Language Selection
+                Text(
+                    text = "Language / भाषा",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    listOf("en" to "English", "ne" to "नेपाली").forEach { (code, label) ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            androidx.compose.material3.RadioButton(
+                                selected = uiState.ttsLanguage == code,
+                                onClick = { viewModel.setTtsLanguage(code) },
+                            )
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 4.dp),
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 // Announcement Format
                 Text(
                     text = "Announcement format",
@@ -106,6 +141,15 @@ fun SettingsScreen(
                     fontWeight = FontWeight.Medium,
                 )
                 AnnouncementFormat.entries.forEach { format ->
+                    val exampleText = if (uiState.ttsLanguage == "ne") {
+                        when (format) {
+                            AnnouncementFormat.PAYMENT_RECEIVED_AMOUNT -> "पाँच सय रुपैयाँ प्राप्त भयो।"
+                            AnnouncementFormat.AMOUNT_RECEIVED -> "पाँच सय रुपैयाँ प्राप्त भयो।"
+                            AnnouncementFormat.PAYMENT_RECEIVED_RS -> "रु. ५०० प्राप्त भयो।"
+                        }
+                    } else {
+                        format.example
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -118,7 +162,7 @@ fun SettingsScreen(
                         )
                         Column(modifier = Modifier.padding(start = 8.dp)) {
                             Text(
-                                text = format.example,
+                                text = exampleText,
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -154,6 +198,36 @@ fun SettingsScreen(
 
             // ── Payment Sources ──
             SettingsSection(title = stringResource(R.string.payment_sources), icon = Icons.Rounded.Payments) {
+                // Compatibility note
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.Top,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .padding(top = 2.dp),
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.payment_sources_compatibility_note),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            lineHeight = 18.sp,
+                        )
+                    }
+                }
+
                 ProviderRegistry.providers.forEach { provider ->
                     Row(
                         modifier = Modifier
@@ -162,33 +236,33 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column {
+                        Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                            val title = if (provider.id == "esewa") {
+                                stringResource(R.string.provider_esewa_title)
+                            } else {
+                                provider.displayName
+                            }
                             Text(
-                                text = provider.displayName,
+                                text = title,
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                val (statusIcon, statusColor, statusText) = when (provider.status) {
-                                    ProviderStatus.VERIFIED -> Triple(
+                                val (statusIcon, statusColor, statusText) = when {
+                                    provider.id == "esewa" -> Triple(
                                         Icons.Rounded.CheckCircle,
                                         ListeningGreen,
-                                        stringResource(R.string.provider_verified)
+                                        stringResource(R.string.provider_status_ready)
                                     )
-                                    ProviderStatus.PARTIALLY_VERIFIED -> Triple(
-                                        Icons.Rounded.Warning,
-                                        PausedAmber,
-                                        stringResource(R.string.provider_partially_verified)
-                                    )
-                                    ProviderStatus.FORMAT_UNVERIFIED -> Triple(
-                                        Icons.Rounded.Warning,
-                                        PausedAmber,
-                                        stringResource(R.string.provider_unverified)
-                                    )
-                                    ProviderStatus.UNSUPPORTED -> Triple(
+                                    provider.category == ProviderCategory.BANK -> Triple(
                                         Icons.Rounded.Info,
                                         MaterialTheme.colorScheme.onSurfaceVariant,
-                                        stringResource(R.string.provider_unsupported)
+                                        stringResource(R.string.provider_status_bank_credit)
+                                    )
+                                    else -> Triple(
+                                        Icons.Rounded.Info,
+                                        MaterialTheme.colorScheme.onSurfaceVariant,
+                                        stringResource(R.string.provider_status_compatible)
                                     )
                                 }
                                 Icon(
@@ -210,6 +284,41 @@ fun SettingsScreen(
                             onCheckedChange = { /* Will be wired to preferences */ },
                         )
                     }
+                }
+
+                // Generic Bank Parser entry for other Nepali banks
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                        Text(
+                            text = stringResource(R.string.provider_other_banks),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Rounded.Info,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(14.dp),
+                            )
+                            Text(
+                                text = " " + stringResource(R.string.provider_status_bank_credit),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+
+                    Switch(
+                        checked = true,
+                        onCheckedChange = { /* Will be wired to preferences */ },
+                    )
                 }
             }
 

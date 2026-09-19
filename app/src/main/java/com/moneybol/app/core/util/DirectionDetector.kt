@@ -52,6 +52,9 @@ object DirectionDetector {
         "sent",
         "withdrawn",
         "withdrawal",
+        "cash withdrawal",
+        "deducted",
+        "deduction",
         "transfer out",
         "transferred from",
         "has been debited",
@@ -62,13 +65,17 @@ object DirectionDetector {
         "payment to",
         "purchase",
         "purchased",
+        "charge",
+        "charged",
+        "fee",
         // Nepali terms
         "कटौती",       // katauti (deducted)
         "भुक्तानी",    // bhuktani (payment made)
     )
 
     /**
-     * Keywords indicating a failed or declined transaction.
+     * Keywords indicating a failed, declined, or reversed transaction.
+     * SAFETY: Reversals, cancellations, and failures must NEVER be announced.
      */
     private val FAILED_INDICATORS = listOf(
         "failed",
@@ -82,6 +89,12 @@ object DirectionDetector {
         "insufficient",
         "insufficient balance",
         "insufficient fund",
+        "reversed",
+        "reversal",
+        "refunded",
+        "refund",
+        "cancelled",
+        "canceled",
     )
 
     /**
@@ -92,8 +105,10 @@ object DirectionDetector {
         "processing",
         "in progress",
         "being processed",
+        "under process",
         "awaiting",
         "on hold",
+        "queued",
     )
 
     /**
@@ -161,8 +176,6 @@ object DirectionDetector {
         return when {
             creditScore > 0 && debitScore == 0 -> PaymentDirection.CREDIT
             debitScore > 0 && creditScore == 0 -> PaymentDirection.DEBIT
-            creditScore > debitScore -> PaymentDirection.CREDIT
-            debitScore > creditScore -> PaymentDirection.DEBIT
             // Both present or neither — ambiguous → UNKNOWN (safe default)
             else -> PaymentDirection.UNKNOWN
         }

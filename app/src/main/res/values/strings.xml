@@ -65,10 +65,16 @@
     <string name="format_amount_received">%s received.</string>
     <string name="format_payment_received_rs">Payment received, Rs. %s.</string>
 
-    <!-- Provider Status -->
+    <!-- Provider Status & Compatibility -->
+    <string name="provider_esewa_title">eSewa — Ready</string>
+    <string name="provider_status_ready">Ready</string>
+    <string name="provider_status_compatible">Compatible notification formats supported</string>
+    <string name="provider_status_bank_credit">Compatible incoming-credit formats supported</string>
+    <string name="provider_other_banks">Other Nepali Banks</string>
+    <string name="payment_sources_compatibility_note">MoneyBol reads payment notifications on your device. Compatibility can vary by bank, wallet, app version, and notification format.</string>
     <string name="provider_verified">Supported</string>
     <string name="provider_partially_verified">Partially verified</string>
-    <string name="provider_unverified">Testing required</string>
+    <string name="provider_unverified">Compatible notification formats supported</string>
     <string name="provider_unsupported">Not supported</string>
 
     <!-- Disclaimer -->

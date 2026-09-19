@@ -43,6 +43,26 @@ class DirectionDetectorTest {
         )
     }
 
+    @Test
+    fun `detect incoming transfer as CREDIT`() {
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "Incoming transfer of NPR 2,500 received from John Doe")
+        )
+    }
+
+    @Test
+    fun `detect Nepali jamma and praapt as CREDIT`() {
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "तपाईंको खातामा रु. ५०० जम्मा भएको छ।")
+        )
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "रकम रु. १,५०० प्राप्त भयो।")
+        )
+    }
+
     // ── Debit detection ──
 
     @Test
@@ -66,6 +86,30 @@ class DirectionDetectorTest {
         assertEquals(
             PaymentDirection.DEBIT,
             DirectionDetector.detect(text = "Rs. 500 withdrawn from ATM")
+        )
+    }
+
+    @Test
+    fun `detect paid to and deducted as DEBIT`() {
+        assertEquals(
+            PaymentDirection.DEBIT,
+            DirectionDetector.detect(text = "Paid to Merchant ABC Rs. 1,200")
+        )
+        assertEquals(
+            PaymentDirection.DEBIT,
+            DirectionDetector.detect(text = "Amount of Rs. 300 deducted from your account")
+        )
+    }
+
+    @Test
+    fun `detect Nepali katauti and bhuktani as DEBIT`() {
+        assertEquals(
+            PaymentDirection.DEBIT,
+            DirectionDetector.detect(text = "खाताबाट रु. ५०० कटौती गरियो।")
+        )
+        assertEquals(
+            PaymentDirection.DEBIT,
+            DirectionDetector.detect(text = "भुक्तानी सफल भयो रु. १,०००")
         )
     }
 
@@ -95,7 +139,15 @@ class DirectionDetectorTest {
         )
     }
 
-    // ── Failed detection ──
+    @Test
+    fun `detect 2FA code as OTP`() {
+        assertEquals(
+            PaymentDirection.OTP,
+            DirectionDetector.detect(text = "Your 2FA security code for transaction is 998877")
+        )
+    }
+
+    // ── Failed and Reversal detection ──
 
     @Test
     fun `detect failed transaction`() {
@@ -113,6 +165,30 @@ class DirectionDetectorTest {
         )
     }
 
+    @Test
+    fun `detect reversed transaction as FAILED`() {
+        assertEquals(
+            PaymentDirection.FAILED,
+            DirectionDetector.detect(text = "Transaction of Rs. 1,500 has been reversed.")
+        )
+        assertEquals(
+            PaymentDirection.FAILED,
+            DirectionDetector.detect(text = "Reversal of Rs. 500 credited back due to network error.")
+        )
+    }
+
+    @Test
+    fun `detect cancelled and refunded as FAILED`() {
+        assertEquals(
+            PaymentDirection.FAILED,
+            DirectionDetector.detect(text = "Your order of Rs. 800 was cancelled.")
+        )
+        assertEquals(
+            PaymentDirection.FAILED,
+            DirectionDetector.detect(text = "Payment of Rs. 400 has been refunded.")
+        )
+    }
+
     // ── Pending detection ──
 
     @Test
@@ -123,7 +199,35 @@ class DirectionDetectorTest {
         )
     }
 
-    // ── Unknown (ambiguous) ──
+    @Test
+    fun `detect processing and under process as PENDING`() {
+        assertEquals(
+            PaymentDirection.PENDING,
+            DirectionDetector.detect(text = "Deposit of Rs. 2,000 is currently processing")
+        )
+        assertEquals(
+            PaymentDirection.PENDING,
+            DirectionDetector.detect(text = "Your payment request is under process")
+        )
+    }
+
+    // ── Ambiguous and Unknown ──
+
+    @Test
+    fun `do not classify payment based on standalone word transaction or NPR`() {
+        assertEquals(
+            PaymentDirection.UNKNOWN,
+            DirectionDetector.detect(text = "Transaction of NPR 500")
+        )
+        assertEquals(
+            PaymentDirection.UNKNOWN,
+            DirectionDetector.detect(text = "NPR 1,500")
+        )
+        assertEquals(
+            PaymentDirection.UNKNOWN,
+            DirectionDetector.detect(text = "Notification regarding transaction 987654")
+        )
+    }
 
     @Test
     fun `return UNKNOWN for ambiguous text`() {
@@ -131,21 +235,22 @@ class DirectionDetectorTest {
             PaymentDirection.UNKNOWN,
             DirectionDetector.detect(text = "Rs. 500")
         )
-    }
-
-    @Test
-    fun `return UNKNOWN for empty text`() {
         assertEquals(
             PaymentDirection.UNKNOWN,
             DirectionDetector.detect(text = "")
         )
-    }
-
-    @Test
-    fun `return UNKNOWN for null text`() {
         assertEquals(
             PaymentDirection.UNKNOWN,
             DirectionDetector.detect(text = null)
+        )
+    }
+
+    @Test
+    fun `return UNKNOWN when credit and debit are equally present`() {
+        // e.g. "Amount credited was later debited" -> 1 credit, 1 debit -> UNKNOWN
+        assertEquals(
+            PaymentDirection.UNKNOWN,
+            DirectionDetector.detect(text = "Amount credited was later debited from your account")
         )
     }
 

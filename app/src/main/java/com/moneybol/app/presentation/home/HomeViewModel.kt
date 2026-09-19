@@ -12,6 +12,7 @@ import com.moneybol.app.data.PaymentRepository
 import com.moneybol.app.notification.MoneyBolNotificationService
 import com.moneybol.app.presentation.home.model.HomeUiState
 import com.moneybol.app.settings.UserPreferencesRepository
+import com.moneybol.app.audio.AnnouncementManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +29,7 @@ class HomeViewModel @Inject constructor(
     private val application: Application,
     private val paymentRepository: PaymentRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val announcementManager: AnnouncementManager,
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -96,8 +98,8 @@ class HomeViewModel @Inject constructor(
 
     fun onTestAnnouncement() {
         _uiState.update { it.copy(isTestPlaying = true) }
+        announcementManager.playTestAnnouncement()
         viewModelScope.launch {
-            // Will be connected to AnnouncementManager in Milestone 5
             kotlinx.coroutines.delay(2000)
             _uiState.update { it.copy(isTestPlaying = false) }
         }
@@ -105,8 +107,8 @@ class HomeViewModel @Inject constructor(
 
     fun onRepeatLastPayment() {
         _uiState.update { it.copy(isRepeatPlaying = true) }
+        announcementManager.repeatLastAnnouncement()
         viewModelScope.launch {
-            // Will be connected to AnnouncementManager in Milestone 5
             kotlinx.coroutines.delay(2000)
             _uiState.update { it.copy(isRepeatPlaying = false) }
         }

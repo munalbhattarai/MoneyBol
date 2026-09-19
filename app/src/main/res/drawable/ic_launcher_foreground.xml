@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Soundbox speaker and sound waves -->
+    <!-- Speaker Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,40 L48,40 L60,30 L60,78 L48,68 L38,68 Z" />
+    <!-- Sound Waves -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M67,44 C70,48 70,60 67,64" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M73,38 C79,44 79,64 73,70" />
+    <!-- Rupee / NPR Accent Dot -->
+    <path
+        android:fillColor="#FFD600"
+        android:pathData="M38,36 A3,3 0 1,0 38,30 A3,3 0 1,0 38,36 Z" />
+</vector>

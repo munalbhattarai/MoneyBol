@@ -49,4 +49,11 @@ class NepaliNumberConverterTest {
     fun `convert comma-separated to number`() {
         assertEquals(1500L, NepaliNumberConverter.toNumber("१,५००"))
     }
+
+    @Test
+    fun `convert Arabic digits to Devanagari`() {
+        assertEquals("०१२३४५६७८९", NepaliNumberConverter.toNepali("0123456789"))
+        assertEquals("५००", NepaliNumberConverter.toNepali("500"))
+        assertEquals("१,५००.५०", NepaliNumberConverter.toNepali("1,500.50"))
+    }
 }

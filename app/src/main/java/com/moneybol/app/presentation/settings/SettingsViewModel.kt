@@ -13,12 +13,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SettingsUiState(
     val announcementFormat: AnnouncementFormat = AnnouncementFormat.PAYMENT_RECEIVED_AMOUNT,
+    val ttsLanguage: String = "en",
     val speechRate: Float = 1.0f,
     val listeningEnabled: Boolean = true,
     val bluetoothEnabled: Boolean = false,
@@ -42,12 +42,14 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 userPreferencesRepository.announcementFormat,
+                userPreferencesRepository.ttsLanguage,
                 userPreferencesRepository.speechRate,
                 userPreferencesRepository.listeningEnabled,
                 userPreferencesRepository.bluetoothEnabled,
-            ) { format, rate, listening, bluetooth ->
+            ) { format, language, rate, listening, bluetooth ->
                 SettingsUiState(
                     announcementFormat = format,
+                    ttsLanguage = language,
                     speechRate = rate,
                     listeningEnabled = listening,
                     bluetoothEnabled = bluetooth,
@@ -62,6 +64,12 @@ class SettingsViewModel @Inject constructor(
     fun setAnnouncementFormat(format: AnnouncementFormat) {
         viewModelScope.launch {
             userPreferencesRepository.setAnnouncementFormat(format)
+        }
+    }
+
+    fun setTtsLanguage(language: String) {
+        viewModelScope.launch {
+            userPreferencesRepository.setTtsLanguage(language)
         }
     }
 

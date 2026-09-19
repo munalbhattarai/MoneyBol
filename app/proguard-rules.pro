@@ -11,6 +11,12 @@
 # Keep payment models (used in reflection-free serialization but good to preserve)
 -keep class com.moneybol.app.core.model.** { *; }
 
+# Keep provider parsers and registry
+-keep class com.moneybol.app.providers.** { *; }
+
+# Keep settings and preferences
+-keep class com.moneybol.app.settings.** { *; }
+
 # Keep NotificationListenerService
 -keep class com.moneybol.app.notification.MoneyBolNotificationService { *; }
 
