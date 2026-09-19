@@ -1,0 +1,42 @@
+[
+  {
+    "provider": "generic_bank",
+    "category": "incoming_credit",
+    "title": "Bank Alert",
+    "text": "Your account XXXXX1234 has been credited by Rs. 1,500 on 2024-01-15. Available Balance: Rs. 25,000.",
+    "amount": 1500,
+    "transactionId": null,
+    "expectedResult": "ANNOUNCE",
+    "note": "SANITIZED SAMPLE - Generic bank credit notification pattern. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "generic_bank",
+    "category": "outgoing_debit",
+    "title": "Bank Alert",
+    "text": "Your account XXXXX1234 has been debited by Rs. 500 on 2024-01-15. Available Balance: Rs. 24,500.",
+    "amount": 500,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - Generic bank debit notification. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "generic_bank",
+    "category": "otp",
+    "title": "Bank OTP",
+    "text": "OTP for your transaction of Rs. 500 is 456789. Valid for 3 minutes. Do not share.",
+    "amount": null,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - OTP with amount context must still be ignored."
+  },
+  {
+    "provider": "generic_bank",
+    "category": "failed",
+    "title": "Transaction Alert",
+    "text": "Transaction failed. Your payment of Rs. 1,000 was declined due to insufficient balance.",
+    "amount": 1000,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - Failed transaction must not be announced."
+  }
+]

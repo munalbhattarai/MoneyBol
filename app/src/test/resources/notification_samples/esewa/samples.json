@@ -1,0 +1,32 @@
+[
+  {
+    "provider": "esewa",
+    "category": "incoming_credit",
+    "title": "eSewa",
+    "text": "Payment received Rs. 500. Reference ID: TEST_ESEWA_001",
+    "amount": 500,
+    "transactionId": "TEST_ESEWA_001",
+    "expectedResult": "ANNOUNCE",
+    "note": "SANITIZED SAMPLE - NOT from real eSewa notification. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "esewa",
+    "category": "outgoing_debit",
+    "title": "eSewa",
+    "text": "Rs. 200 sent to Test User. Ref ID: TEST_ESEWA_002",
+    "amount": 200,
+    "transactionId": "TEST_ESEWA_002",
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - NOT from real eSewa notification. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "esewa",
+    "category": "otp",
+    "title": "eSewa",
+    "text": "Your OTP is 123456. Do not share with anyone.",
+    "amount": null,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - OTP must never be announced."
+  }
+]

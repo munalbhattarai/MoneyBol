@@ -1,0 +1,84 @@
+<resources>
+    <string name="app_name">MoneyBol</string>
+    <string name="app_tagline">Your phone. Your payment soundbox.</string>
+
+    <!-- Listening States -->
+    <string name="status_listening">Listening</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_permission_required">Permission Required</string>
+    <string name="status_service_problem">Service Problem</string>
+    <string name="status_ready">Ready for payments</string>
+
+    <!-- Dashboard -->
+    <string name="last_payment">Last payment</string>
+    <string name="today_payments">Today\'s payments</string>
+    <string name="no_payments_yet">No payments yet</string>
+    <string name="payment_received">Payment received</string>
+    <string name="test_announcement">Test announcement</string>
+    <string name="repeat_last">Repeat last</string>
+    <string name="payments_count">%d payments</string>
+
+    <!-- Currency -->
+    <string name="currency_rs">Rs.</string>
+    <string name="currency_npr">NPR</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">MoneyBol Service</string>
+    <string name="notification_channel_description">Keeps MoneyBol listening for payment notifications</string>
+    <string name="notification_title">MoneyBol is listening</string>
+    <string name="notification_text">Ready to announce incoming payments</string>
+
+    <!-- Permissions -->
+    <string name="permission_notification_access_title">Notification Access</string>
+    <string name="permission_notification_access_desc">MoneyBol needs notification access to detect payment notifications from your banking and wallet apps. MoneyBol does not need your bank password, wallet password, PIN, or OTP.</string>
+    <string name="enable_notification_access">Enable Notification Access</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">MoneyBol</string>
+    <string name="onboarding_welcome_subtitle">Your phone. Your payment soundbox.</string>
+    <string name="onboarding_how_title">How it works</string>
+    <string name="onboarding_how_desc">MoneyBol listens for payment notifications and announces qualifying incoming payments.</string>
+    <string name="onboarding_privacy_title">Your privacy matters</string>
+    <string name="onboarding_privacy_desc">MoneyBol does not need your bank password, wallet password, PIN, or OTP. All data stays on your device.</string>
+    <string name="onboarding_permission_title">Notification Access</string>
+    <string name="onboarding_permission_desc">MoneyBol needs to read notifications from your payment apps to detect incoming payments. No notification content is stored or transmitted.</string>
+    <string name="onboarding_providers_title">Payment sources</string>
+    <string name="onboarding_providers_desc">Select which payment apps MoneyBol should listen to.</string>
+    <string name="onboarding_test_title">Test your setup</string>
+    <string name="onboarding_ready">You\'re ready!</string>
+    <string name="get_started">Get Started</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="voice_settings">Voice</string>
+    <string name="payment_sources">Payment Sources</string>
+    <string name="audio_settings">Audio</string>
+    <string name="notification_settings">Notifications</string>
+    <string name="privacy">Privacy</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+
+    <!-- Announcement Formats -->
+    <string name="format_payment_received_amount">Payment received. %s.</string>
+    <string name="format_amount_received">%s received.</string>
+    <string name="format_payment_received_rs">Payment received, Rs. %s.</string>
+
+    <!-- Provider Status -->
+    <string name="provider_verified">Supported</string>
+    <string name="provider_partially_verified">Partially verified</string>
+    <string name="provider_unverified">Testing required</string>
+    <string name="provider_unsupported">Not supported</string>
+
+    <!-- Disclaimer -->
+    <string name="disclaimer">MoneyBol is a notification-based announcement system. It does not independently verify bank transactions. A qualifying incoming-payment notification was detected on your device.</string>
+
+    <!-- History -->
+    <string name="history">History</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
+    <string name="no_history">No payment history</string>
+</resources>

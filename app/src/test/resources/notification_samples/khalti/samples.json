@@ -1,0 +1,42 @@
+[
+  {
+    "provider": "khalti",
+    "category": "incoming_credit",
+    "title": "Khalti",
+    "text": "Payment received Rs. 1,500 from Test Customer. Transaction ID: TEST_KHALTI_001",
+    "amount": 1500,
+    "transactionId": "TEST_KHALTI_001",
+    "expectedResult": "ANNOUNCE",
+    "note": "SANITIZED SAMPLE - NOT from real Khalti notification. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "khalti",
+    "category": "outgoing_debit",
+    "title": "Khalti",
+    "text": "Rs. 300 sent to Test Merchant. Txn ID: TEST_KHALTI_002",
+    "amount": 300,
+    "transactionId": "TEST_KHALTI_002",
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - NOT from real Khalti notification. FORMAT_UNVERIFIED."
+  },
+  {
+    "provider": "khalti",
+    "category": "otp",
+    "title": "Khalti",
+    "text": "Your verification code is 789012. Valid for 5 minutes.",
+    "amount": null,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - OTP must never be announced."
+  },
+  {
+    "provider": "khalti",
+    "category": "promotional",
+    "title": "Khalti",
+    "text": "Get 10% cashback on your next recharge! Use code SAVE10",
+    "amount": null,
+    "transactionId": null,
+    "expectedResult": "IGNORE",
+    "note": "SANITIZED SAMPLE - Promotional notification."
+  }
+]
