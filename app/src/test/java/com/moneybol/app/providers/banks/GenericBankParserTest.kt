@@ -81,6 +81,100 @@ class GenericBankParserTest {
         assertEquals(PaymentDirection.CREDIT, event?.direction)
     }
 
+    // ── Real Nepali Bank SMS Samples ──
+
+    @Test
+    fun `parse Machhapuchchhre Bank MBL Fonepay QR merchant SMS alert`() {
+        val notification = createNotification(
+            title = "MBL_ALERT",
+            text = "Dear Merchant,\nFP QR transaction from 984#077 of NPR 100.00 is successful.\nRRN: 44802649c2RB\nThank you\n- MBL\nDownload: onelink.to/fp9e4k",
+        )
+
+        assertTrue(parser.canHandle(notification))
+        val event = parser.parse(notification)
+
+        assertNotNull(event)
+        assertEquals(10000L, event?.amount) // NPR 100.00 -> 10000 paisa
+        assertEquals(PaymentDirection.CREDIT, event?.direction)
+        assertEquals("44802649c2RB", event?.transactionId)
+        assertEquals("Machhapuchchhre Bank", event?.providerDisplayName)
+        assertEquals("984#077", event?.payerName)
+        assertTrue((event?.confidence ?: 0f) >= 0.7f)
+    }
+
+    @Test
+    fun `parse NIC ASIA Bank credited alert with Remarks`() {
+        val notification = createNotification(
+            title = "NICA_ALERT",
+            text = "Your 226###41002 has been Credited by NPR 2,510.00 on 20/09/2026 11:05:46, Remarks: FPQR-485270400-5865-32. Survey: https://bit.ly/42utwDR ,Help us improve!. NI",
+        )
+
+        assertTrue(parser.canHandle(notification))
+        val event = parser.parse(notification)
+
+        assertNotNull(event)
+        assertEquals(251000L, event?.amount) // NPR 2,510.00 -> 251000 paisa
+        assertEquals(PaymentDirection.CREDIT, event?.direction)
+        assertEquals("FPQR-485270400-5865-32", event?.transactionId)
+        assertEquals("NIC ASIA Bank", event?.providerDisplayName)
+        assertTrue((event?.confidence ?: 0f) >= 0.7f)
+    }
+
+    @Test
+    fun `parse NIC ASIA Bank received from alert with RRN`() {
+        val notification = createNotification(
+            title = "NICA_ALERT",
+            text = "Rs. 10.00 received from 982****191 for RRN: 14240939JDsX on 2026-09-20 03:26:23 Download MoBank- http://bit.ly/MoBank4 Thank You NIC ASIA BANK",
+        )
+
+        assertTrue(parser.canHandle(notification))
+        val event = parser.parse(notification)
+
+        assertNotNull(event)
+        assertEquals(1000L, event?.amount) // Rs. 10.00 -> 1000 paisa
+        assertEquals(PaymentDirection.CREDIT, event?.direction)
+        assertEquals("14240939JDsX", event?.transactionId)
+        assertEquals("NIC ASIA Bank", event?.providerDisplayName)
+        assertEquals("982****191", event?.payerName)
+        assertTrue((event?.confidence ?: 0f) >= 0.7f)
+    }
+
+    @Test
+    fun `parse Nabil Bank SMS alert`() {
+        val notification = createNotification(
+            title = "NABIL_ALERT",
+            text = "Your A/C 01234XXXX has been credited with NPR 500.00 on 20/09/2026. Ref: NABIL887766. Available Bal: NPR 15,000.00",
+        )
+
+        assertTrue(parser.canHandle(notification))
+        val event = parser.parse(notification)
+
+        assertNotNull(event)
+        assertEquals(50000L, event?.amount)
+        assertEquals(PaymentDirection.CREDIT, event?.direction)
+        assertEquals("NABIL887766", event?.transactionId)
+        assertEquals("Nabil Bank", event?.providerDisplayName)
+        assertTrue((event?.confidence ?: 0f) >= 0.7f)
+    }
+
+    @Test
+    fun `parse Global IME Bank SMS alert`() {
+        val notification = createNotification(
+            title = "GBIME_ALERT",
+            text = "Your account has been credited by NPR 1,200.00 on 20/09/2026. Remarks: FPQR-554433. Global IME Bank",
+        )
+
+        assertTrue(parser.canHandle(notification))
+        val event = parser.parse(notification)
+
+        assertNotNull(event)
+        assertEquals(120000L, event?.amount)
+        assertEquals(PaymentDirection.CREDIT, event?.direction)
+        assertEquals("FPQR-554433", event?.transactionId)
+        assertEquals("Global IME Bank", event?.providerDisplayName)
+        assertTrue((event?.confidence ?: 0f) >= 0.7f)
+    }
+
     // ── Safety Rejections ──
 
     @Test

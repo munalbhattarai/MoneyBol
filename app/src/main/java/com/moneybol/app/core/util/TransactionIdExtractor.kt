@@ -21,6 +21,12 @@ object TransactionIdExtractor {
      * Each pattern captures the ID value in group 1.
      */
     private val ID_PATTERNS = listOf(
+        // RRN (Retrieval Reference Number - common in Fonepay & Nepali bank SMS/alerts)
+        Regex("""(?i)\bRRN[:\s=]+([A-Za-z0-9\-_]{4,30})"""),
+
+        // Remarks (common in banking SMS like Remarks: FPQR-485270400-5865-32)
+        Regex("""(?i)\bRemarks?[:\s=]+([A-Za-z0-9\-_]{4,30})"""),
+
         // Reference ID / Ref ID / Ref No
         Regex("""(?i)(?:reference|ref)\s*(?:id|no|number|#)?[:\s=]+([A-Za-z0-9\-_]{4,30})"""),
 
@@ -29,6 +35,9 @@ object TransactionIdExtractor {
 
         // Trace No / Trace Number
         Regex("""(?i)trace\s*(?:no|number|#)?[:\s=]+([A-Za-z0-9\-_]{4,30})"""),
+
+        // UTR (Unique Transaction Reference)
+        Regex("""(?i)\bUTR[:\s=]+([A-Za-z0-9\-_]{4,30})"""),
 
         // Generic ID pattern: "ID: XXXX" or "Id: XXXX"
         Regex("""(?i)\bID[:\s=]+([A-Za-z0-9\-_]{4,30})\b"""),

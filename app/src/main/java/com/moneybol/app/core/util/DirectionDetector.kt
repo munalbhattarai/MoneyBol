@@ -35,12 +35,34 @@ object DirectionDetector {
         "been credited to",
         "credited to your",
         "credited to a/c",
+        "credited by",
+        "credited with",
+        "credited for",
         "cash deposit",
         "remittance credit",
         "remittance received",
+        "received from",
+        // QR & Merchant transaction terms
+        "fp qr transaction",
+        "qr transaction",
+        "qr payment",
+        "qr received",
+        "fonepay qr",
+        "nepalpay qr",
+        "merchant payment",
+        "fund transfer from",
+        "inward fund transfer",
+        "inward remittance",
+        "inward clearing",
+        "ips credit",
+        "connectips credit",
+        "nchl credit",
         // Nepali terms
         "जम्मा",      // jamma (credited/deposited)
         "प्राप्त",     // praapt (received)
+        "जम्मा भएको",
+        "जम्मा भयो",
+        "प्राप्त भयो",
     )
 
     /**

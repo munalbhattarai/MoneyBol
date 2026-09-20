@@ -63,6 +63,22 @@ class DirectionDetectorTest {
         )
     }
 
+    @Test
+    fun `detect FP QR and merchant QR transaction as CREDIT`() {
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "Dear Merchant, FP QR transaction from 984#077 of NPR 100.00 is successful. RRN: 44802649c2RB")
+        )
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "Rs. 10.00 received from 982****191 for RRN: 14240939JDsX")
+        )
+        assertEquals(
+            PaymentDirection.CREDIT,
+            DirectionDetector.detect(text = "Your account has been Credited by NPR 2,510.00")
+        )
+    }
+
     // ── Debit detection ──
 
     @Test
